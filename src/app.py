@@ -68,11 +68,11 @@ if st.sidebar.button("Predict Startup Success"):
     probabilities = model.predict_proba(input_encoded)[0]
     prediction = int(np.argmax(probabilities))
     label = encoder.inverse_transform([prediction])[0]
-    confidence = float(probabilities[prediction])
- 
-    st.plotly_chart(gauge(confidence, label), width="stretch")
-    st.metric(f"Probability of {label}", f"{confidence * 100:.1f}%")
- 
+    success_prob = float(probabilities[list(encoder.classes_).index("success")])
+
+    st.plotly_chart(gauge(success_prob, label), width="stretch")
+    st.metric("Probability of success", f"{success_prob * 100:.1f}%")
+
     if label == "success":
         st.success("Startup is predicted to SUCCEED (IPO or Acquisition).")
     else:
